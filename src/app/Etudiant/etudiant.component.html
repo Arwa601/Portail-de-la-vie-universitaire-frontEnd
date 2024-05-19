@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+    
+
+.image-container {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 50%;
+    transform: translateY(-20%);
+}
+
+.select-profile-picture {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) translateY(-20%); /* Pour déplacer le message vers le haut */
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 5px 10px;
+    border-radius: 50%; /* Même border-radius que l'image */
+    cursor: pointer;
+}
+
+
+.profile-info {
+    margin-top: 100px;
+    
+}
+
+.profile-usertitle-name,
+.profile-usertitle-job {
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #333;
+    font-family: 'Roboto'; /* Utilisation de la police Roboto */
+}
+
+.search-bar {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.table th {
+    background-color:rgb(190, 233, 229);
+    font-weight: bold;
+    color: #333;
+}
+
+.table td {
+    color: #555;
+}
+
+.well {
+    background-color: #b4bdc7;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+
+.small-text {
+    font-size: 18px; /* Taille de police plus petite */
+    color: green;
+}
+
+
+
+
+</style >
+</head>
+<body >
+
+<div >
+    <app-navbar></app-navbar>
+</div>
+<div class="app-container">
+    <div class="row profile">
+        <div class="col-md-3">
+            <div class="profile-sidebar">
+                <div class="profile-usermenu"></div>
+                <div class="image-container">
+                    <img class="image" [src]="imageUrl ? imageUrl : 'https://www.w3schools.com/howto/img_avatar.png'" (click)="onSelectFile" [style.width.px]="180" [style.height.px]="200">
+                    <input type="file" (change)="onSelectFile($event)" class="select-profile-picture">
+                    <span class="message">Tap here to select your picture</span>
+                </div>
+                <br>
+                <div class="profile-usertitle-name">Nom:{{etudiant.nom}}</div>
+                <br>
+                <div class="profile-usertitle-job">Prénom: {{etudiant.prenom}}</div>
+                <br>
+                <div class="profile-usertitle-job">Email:{{etudiant.email}}</div>
+                <br>
+                <div class="profile-usertitle-job">Adress:{{etudiant.adresse}}</div>
+                <br>
+                <div class="profile-usertitle-job">Level:{{etudiant.level}}</div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div ng-app="myApp" class="profile-content">
+                <h3 class="well">Consultation des notes</h3>
+                <div class="input-group input-group-outline">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" style="font-size: 36px;"><i class="fas fa-search"></i></span>
+                    </div>
+                    <input type="text" (keyup)="doFilter($event)" class="form-control" placeholder="Entrez le nom du matiére ">
+                </div>
+                <div class="table-responsive p-0" style="overflow: auto; max-height: 100px;">
+                    <table class="table align-items-center mb-0">
+                        <thead>
+                            <tr>
+                                <th style="font-size: 14p;  color:black">Matière</th>
+                                <th style="font-size: 14p;  color:black">DS</th>
+                                <th style="font-size: 14p;  color:black">TP</th>
+                                <th style="font-size: 14p;  color:black">Projet</th>
+                                <th style="font-size: 14p;  color:black">Examen</th>
+                                <th style="font-size: 14p;  color:black">Remarque</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let e of filteredNotes">
+                                <td>
+                                    <div class="d-flex px-2 py-1">
+                                        <div class="d-flex flex-column justify-content-center">
+                                            <h6 class="mb-0 text-sm">{{e.matiere}}</h6>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex px-2 py-1">
+                                        <div class="d-flex flex-column justify-content-center">
+                                            <h6 class="mb-0 text-sm">{{e.noteDs}}</h6>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex px-2 py-1">
+                                        <div class="d-flex flex-column justify-content-center">
+                                            <h6 class="mb-0 text-sm">{{e.noteTp}}</h6>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex px-2 py-1">
+                                        <div class="d-flex flex-column justify-content-center">
+                                            <h6 class="mb-0 text-sm">{{e.notePrj}}</h6>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex px-2 py-1">
+                                        <div class="d-flex flex-column justify-content-center">
+                                            <h6 class="mb-0 text-sm">{{e.noteExamen}}</h6>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex px-2 py-1">
+                                        <div class="d-flex flex-column justify-content-center">
+                                            <h6 class="mb-0 text-sm">{{e.remarque}}</h6>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <p class="small-text">
+                Si vous avez des doutes concernant une note, n'hésitez pas à contacter l'administration et à remplir une demande de double correction si nécessaire.
+            </p>
+        </div>
+    </div>
+   
+</div>
+</body>
+
+</html>
